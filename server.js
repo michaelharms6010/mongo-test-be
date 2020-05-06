@@ -2,6 +2,11 @@ const express = require("express");
 const cors = require("cors");
 const helmet = require("helmet");
 const morgan = require("morgan");
+const MongoClient = require('mongodb').MongoClient
+
+MongoClient.connect('mongodb-connection-string', (err, client) => {
+    // ... do something here
+})
 
 const userRouter = require("./users/users-router")
 const authRouter = require("./auth/auth-router")
