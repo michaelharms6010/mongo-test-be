@@ -19,8 +19,11 @@ router.post('/register',  (req, res) => {
 
 router.post('/login', (req, res) => {
   let {username, password} = req.body;
-  collection.find({username})
-    .then(res => res.status(201).json(res))
+  collection.find({username}).toArray()
+    .then(res => {
+      const token = generateToken(res)
+      res.status(200).json({message: `Welcome, ${username}`, token})
+    })
     .catch(err => res.status(500).json(err))
 
 });
