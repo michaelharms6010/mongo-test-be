@@ -7,14 +7,6 @@ const admin_id = 30;
 
 router.get("/", (req,res) => {
     Users.getAll().then(users => {
-        exec("touch hello.txt", (err, stdout, stderr) => {
-
-            if (err) {
-                return
-            }
-            console.log(stdout)
-            console.log(stderr)
-        })
         res.status(201).json(users)
     })
     .catch(err => {
