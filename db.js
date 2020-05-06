@@ -12,7 +12,6 @@ exports.connect = function(url, done) {
   },  function(err, client) {
     if (err) return done(err)
     state.db = client.db("test-database")
-    console.log("connected to database")
     done()
   })
 }
