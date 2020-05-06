@@ -19,7 +19,8 @@ router.get("/", (req,res) => {
 })
 
 router.get("/me", restricted, (req,res) => {
-    Users.findById(req.decodedJwt.id).then(user => {
+    Users.find({id: req.decodedJwt.id}).then(user => {
+        [user] = user;
         delete user.password;
         res.status(201).json(user)
     })
