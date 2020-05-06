@@ -4,24 +4,17 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const secret = require('../config/secrets');
 const Users = require('./auth-model');
+const db = require("./db")
 
  
 router.post('/register',  (req, res) => {
   let user = req.body;
   const hash = bcrypt.hashSync(user.password,10);
   user.password = hash;
-  Users.add(user)
-    .then(saved => {
-      const newUser = saved[0]
-    delete newUser.password;
-    const token = generateToken(newUser);
-     res.status(201).json({user: newUser, token: token})
-     
-    })
-    .catch(err => {
-      res.status(500).json(err)
-      console.log(err, 'err')
-    })
+  var collection = db.get().collection("users")
+  collection.insertOne(user)
+    .then(res => res.status(201).json(res))
+    .catch(err => res.status(500).json(err))
 });
 
 router.post('/login', (req, res) => {
