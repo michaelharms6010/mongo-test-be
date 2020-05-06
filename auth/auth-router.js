@@ -10,29 +10,37 @@ router.post('/register',  (req, res) => {
   let user = req.body;
   const hash = bcrypt.hashSync(user.password,10);
   user.password = hash;
-  var collection = db.get().collection("users")
+  const collection = db.get().collection("users")
   collection.insertOne(user)
-    .then(res => res.status(201).json(res))
-    .catch(err => res.status(500).json(err))
+    .then(user => {
+      console.log(user)
+      
+      res.status(201).json({message: `Created user ${user.username}`})
+    })
+    
+      .catch(err => res.status(500).json(err))
 });
 
 router.post('/login', (req, res) => {
   let {username, password} = req.body;
-  collection.find({username}).toArray()
-    .then(res => {
-      const token = generateToken(res)
-      res.status(200).json({message: `Welcome, ${username}`, token})
+  const collection = db.get().collection("users")
+  collection.find({username}).toArray((err, docs) =>{
+      if (err) {
+        res.status(500).json(err)
+      } else {
+        const [newUser] = docs;
+        delete newUser.password;
+        const token = generateToken(newUser)
+        res.status(200).json(token)
+      }
     })
-    .catch(err => res.status(500).json(err))
-
 });
 
 
 function generateToken(user) {
   const payload = {
     username: user.username,
-    id: user.id,
-    
+    _id: user._id,
   };
   const options = {
     expiresIn: "42069d"
