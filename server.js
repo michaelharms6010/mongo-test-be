@@ -16,26 +16,7 @@ server.use(morgan("dev"));
 server.use("/auth", authRouter)
 
 server.get("/", (req,res) => {
-    db.get().createCollection("users", {
-        validator: {
-           $jsonSchema: {
-              bsonType: "object",
-              required: [ "username", "password"],
-              uniqueItems: true,
-              properties: {
-                 username: {
-                    bsonType: "string",
-                    description: "must be a string and is required"
-                 },
-                 password: {
-                    bsonType: "string",
-                    description: "must be a string and is required"
-                 },
-              }
-           }
-        }
-     })
-     res.status(200).json({message: "done"})
+     res.status(200).json({message: "server is up"})
 })
 
 module.exports = server;
