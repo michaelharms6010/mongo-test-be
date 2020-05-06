@@ -6,20 +6,27 @@ const secret = require('../config/secrets');
 const db = require("../db")
 
  
-router.post('/register',  (req, res) => {
+router.post('/register', (req, res) => {
   let user = req.body;
-  const hash = bcrypt.hashSync(user.password,10);
-  user.password = hash;
   const collection = db.get().collection("users")
-  collection.insertOne(user)
-    .then(user => {
-      [newUser] = user.ops;
-      delete newUser.password;
-      const token = generateToken(newUser)
-      res.status(201).json({message: `Created user ${newUser.username}`, token})
+  collection.find({username: user.username}).toArray()
+  .then(found => {
+    if (found.length) {
+      res.status(400).json({message: "That user already exists."})
+    } else {
+      const hash = bcrypt.hashSync(user.password,10);
+      user.password = hash;
+      collection.insertOne(user)
+        .then(user => {
+          [newUser] = user.ops;
+          delete newUser.password;
+          const token = generateToken(newUser)
+          res.status(201).json({message: `Created user ${newUser.username}`, token})
+        })
+      
+        .catch(err => res.status(500).json(err))
+      }
     })
-    
-      .catch(err => res.status(500).json(err))
 });
 
 router.post('/login', (req, res) => {
