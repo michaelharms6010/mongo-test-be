@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const Users = require('./users-model');
+const db = require("../db");
 const restricted = require("../auth/restricted-middleware");
 const { exec } = require("child_process")
 
