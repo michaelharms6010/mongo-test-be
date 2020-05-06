@@ -4,12 +4,10 @@ const helmet = require("helmet");
 const morgan = require("morgan");
 const MongoClient = require('mongodb').MongoClient
 
-MongoClient.connect('mongodb-connection-string', (err, client) => {
-    // ... do something here
+MongoClient.connect(process.env.MONGO_CONNECTION, (err, client) => {
+    if (err) return console.error(err)
+    console.log('Connected to Database')
 })
-
-const userRouter = require("./users/users-router")
-const authRouter = require("./auth/auth-router")
 
 const server = express();
 
@@ -18,8 +16,6 @@ server.use(cors());
 server.use(express.json());
 server.use(morgan("dev"));
 
-server.use("/auth", authRouter)
-server.use("/users", userRouter)
 
 server.get("/", (req,res) => {
     res.json({message: "Server is up and running"})
