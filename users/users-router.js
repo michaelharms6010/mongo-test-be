@@ -18,12 +18,12 @@ router.get("/", (req,res) => {
     })
 })
 
-router.get("/me", restricted, (req,res) => {
-    Users.find({id: req.decodedJwt.id}).then(user => {
-        [user] = user;
-        delete user.password;
-        res.status(201).json(user)
-    })
+router.get("/me", restricted, async (req,res) => {
+    const users = db.get().collection("users")
+    const user = await users.find({username: req.decodedJwt.username}).toArray()
+    delete user.password;
+    res.status(200).json(user)
+    
 })
 
 
