@@ -4,7 +4,7 @@ const helmet = require("helmet");
 const morgan = require("morgan");
 const MongoClient = require('mongodb').MongoClient
 
-MongoClient.connect(process.env.MONGO_CONNECTION, (err, client) => {
+MongoClient.connect(process.env.MONGO_CONNECTION, {useUnifiedTopology: true}, (err, client) => {
     if (err) return console.error(err)
     console.log('Connected to Database')
 })
