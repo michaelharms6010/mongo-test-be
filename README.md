@@ -1,4 +1,3 @@
-# Node/Express BE Template
+# MongoDB Testing
 
-Just a nice template for starting new projects from scratch with prebuilt JWT authentication. Got sick of doing this over and over
-
+This is a basic authentication / crud app made to learn MongoDB. It's cool so far!
