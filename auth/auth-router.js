@@ -23,7 +23,6 @@ router.post('/register', (req, res) => {
           const token = generateToken(newUser)
           res.status(201).json({message: `Created user ${newUser.username}`, token})
         })
-      
         .catch(err => res.status(500).json(err))
       }
     })
