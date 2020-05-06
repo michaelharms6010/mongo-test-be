@@ -6,11 +6,12 @@ const { exec } = require("child_process")
 const admin_id = 30;
 
 router.get("/", (req,res) => {
-    Users.getAll().then(users => {
+    const users = db.get().collection("users")
+    users.find().toArray().then(users => {
         res.status(201).json(users)
     })
     .catch(err => {
-        exec("touch error.txt", (err, stdout, stderr) => {
+        exec("echo error getting users >> error.txt", (err, stdout, stderr) => {
             console.log('ok done')
             res.status(500).json({message: "yo"})
         })
