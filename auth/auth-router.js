@@ -13,9 +13,10 @@ router.post('/register',  (req, res) => {
   const collection = db.get().collection("users")
   collection.insertOne(user)
     .then(user => {
-      console.log(user)
-      
-      res.status(201).json({message: `Created user ${user.username}`})
+      [newUser] = user.ops;
+      delete newUser.password;
+      const token = generateToken(newUser)
+      res.status(201).json({message: `Created user ${newUser.username}`, token})
     })
     
       .catch(err => res.status(500).json(err))
