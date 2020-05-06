@@ -35,10 +35,15 @@ router.post('/login', (req, res) => {
       if (err) {
         res.status(500).json(err)
       } else {
-        const [newUser] = docs;
-        delete newUser.password;
-        const token = generateToken(newUser)
-        res.status(200).json({message: `Welcome ${username}`, token})
+        const [savedUser] = docs;
+        if (bcrypt.compareSync(password, savedUser.password)) {
+          delete savedUser.password;
+          const token = generateToken(savedUser)
+          res.status(200).json({message: `Welcome ${username}`, token})
+        } else {
+          res.status(401).json({message: "Password invalid"})
+        }
+
       }
     })
 });
