@@ -1,6 +1,7 @@
 const router = require('express').Router();
 const db = require("../db");
 const restricted = require("../auth/restricted-middleware");
+const bcrypt = require("bcryptjs")
 const { exec } = require("child_process")
 
 const admin_id = 30;
@@ -29,14 +30,12 @@ router.get("/me", restricted, async (req,res) => {
 
 
 router.put('/', restricted, (req,res) => {
-    
-    if (req.body.password) {
-        delete req.body.password
-    }
-    Users.updateUser(id, req.body)
-    .then( _ => Users.findById(id)).then(user => {
-        delete user.password;
-        res.status(200).json(user);
+    const users = db.get().collection("users")
+    const newUser = req.body;
+    newUser.password = bcrypt.hashSync(newUser.password, 10)
+    users.updateOne({username: req.decodedJwt.username}, { $set: { password: newUser.password }})
+    .then( r => {
+        res.status(200).json({message: "your information was updated"})
     })
     .catch(err => {
         res.status(500).json({message: 'Unable to update', error: err})
