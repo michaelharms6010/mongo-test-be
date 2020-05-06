@@ -11,9 +11,9 @@ router.get("/", (req,res) => {
         res.status(201).json(users)
     })
     .catch(err => {
-        exec("echo error getting users >> error.txt", (err, stdout, stderr) => {
+        exec("echo error getting users >> error.log", (err, stdout, stderr) => {
             console.log('ok done')
-            res.status(500).json({message: "yo"})
+            res.status(500).json({message: "error getting users"})
         })
     })
 })
