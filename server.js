@@ -2,12 +2,8 @@ const express = require("express");
 const cors = require("cors");
 const helmet = require("helmet");
 const morgan = require("morgan");
-const MongoClient = require('mongodb').MongoClient
+const db = require("./db");
 
-MongoClient.connect(process.env.MONGO_CONNECTION, {useUnifiedTopology: true}, (err, client) => {
-    if (err) return console.error(err)
-    console.log('Connected to Database')
-})
 
 const server = express();
 
