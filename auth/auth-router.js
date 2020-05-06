@@ -38,7 +38,7 @@ router.post('/login', (req, res) => {
         const [newUser] = docs;
         delete newUser.password;
         const token = generateToken(newUser)
-        res.status(200).json(token)
+        res.status(200).json({message: `Welcome ${username}`, token})
       }
     })
 });
